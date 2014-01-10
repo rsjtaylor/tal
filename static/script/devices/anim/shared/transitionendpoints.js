@@ -154,7 +154,8 @@ require.def(
             bottom: "px",
             right:  "px",
             width:  "px",
-            height: "px"
+            height: "px",
+            margin: "px"
         };
         
         return TransitionEndPoints;
