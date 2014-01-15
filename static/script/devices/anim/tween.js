@@ -118,7 +118,7 @@ require.def(
 
                 // Fire client callback if it exists
                 if (typeof options.onComplete === 'function') {
-                    options.onComplete();
+                    options.onComplete.apply(this, arguments);
                 }
             }
 

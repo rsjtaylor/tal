@@ -100,11 +100,11 @@ require.def('antie/lib/tween', function () {
                 );
 
             while (i < _tweens.length) {
-
-                if (_tweens[i].update(time)) {
+                var tween = _tweens[i];
+                if (tween.update(time)) {
                     i++;
                 } else {
-                    _tweens.splice(i, 1);
+                    TWEEN.remove(tween);
                 }
 
             }
