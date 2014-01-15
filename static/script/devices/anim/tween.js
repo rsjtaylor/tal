@@ -88,10 +88,15 @@ require.def(
                 var prop, unit, styleValue;
                 for (prop in this) {
                     if (this.hasOwnProperty(prop)) {
-                        unit = options.units ? options.units[prop] : TransitionEndPoints.defaultUnits[prop];
-                        unit = unit || "";
-                        styleValue = this[prop] + unit;
-                        options.el.style.setProperty(prop, styleValue, '');
+                        if (prop === 'scrollTop' || prop === 'scrollLeft') {
+                            options.el[prop] = this[prop];
+                        } else {
+                            unit = options.units ? options.units[prop] : TransitionEndPoints.defaultUnits[prop];
+                            unit = unit || "";
+                            styleValue = this[prop] + unit;
+                            options.el.style.setProperty(prop, styleValue, '');
+                        }
+
                     }
                 }
             }

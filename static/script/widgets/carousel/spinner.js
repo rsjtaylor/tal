@@ -64,7 +64,7 @@ require.def('antie/widgets/carousel/spinner',
                 moveElementOptions = this._getOptions(animOptions, relativePixels);
                 this.stopAnimation();
                 this._animating = true;
-                this._currentAnimation = this._device.moveElementTo(moveElementOptions);
+                this._currentAnimation = this._device.scrollElementTo(moveElementOptions);
             },
 
             /**
@@ -82,7 +82,7 @@ require.def('antie/widgets/carousel/spinner',
                 destination = {};
                 destination[this._getEdge()] = relativePixels;
                 clonedOptions = this._shallowCloneOptions(options);
-                clonedOptions.el = this._mask.getWidgetStrip().outputElement;
+                clonedOptions.el = this._mask.outputElement;
                 clonedOptions.to = destination;
                 clonedOptions.duration = clonedOptions.duration || 150;
                 clonedOptions.easing = clonedOptions.easing || 'linear';

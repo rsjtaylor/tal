@@ -32,6 +32,9 @@ require.def(
         'antie/devices/anim/tween'
     ],
     function(Device, TransitionEndPoints)  {
+
+        var maskCheck = /_(Carousel)?[Mm]ask$/;
+
         function movesScroll( startLeft, startTop, changeLeft, changeTop, options ){
             var to, from;
             if ((changeLeft === 0) && (changeTop === 0)) {
@@ -46,18 +49,36 @@ require.def(
             }
             from = {};
             if (startTop !== undefined && changeTop !== 0) {
-                from.top = startTop;
+                if (options.to.scrollTop) {
+                    from.scrollTop = startTop;
+                } else {
+                    from.top = startTop;
+                }
+
             }
             if (startLeft !== undefined && changeLeft !== 0) {
-                from.left = startLeft;
+                if (options.to.scrollLeft) {
+                    from.scrollLeft = startLeft;
+                } else {
+                    from.left = startLeft;
+                }
             }
 
             to = {};
             if (options.to.top !== undefined && changeTop !== 0) {
-                to.top = (options.to.top);
+                if (options.to.scrollTop) {
+                    to.scrollTop = options.to.scrollTop;
+                } else {
+                    to.top = (options.to.top);
+                }
+
             }
             if (options.to.left !== undefined && changeLeft !== 0) {
-                to.left = (options.to.left);
+                if (options.to.scrollLeft) {
+                    to.scrollLeft = options.to.scrollLeft;
+                } else {
+                    to.top = (options.to.top);
+                }
             }
 
             return this._tween({
@@ -93,12 +114,12 @@ require.def(
             }
 
             // Check validity of call and use child element as the real target
-            if (new RegExp("_mask$").test(options.el.id)) {
+            if (maskCheck.test(options.el.id)) {
                 if (options.el.childNodes.length === 0) {
                     return null;
                 }
                 options.el.style.position = 'relative';
-                newOptions.el = options.el.childNodes[0];
+                newOptions.el = options.el;
                 newOptions.el.style.position = 'relative';
             } else {
                 return null;
@@ -112,10 +133,20 @@ require.def(
                 newOptions.to.top = -options.to.top;
             }
 
-            startLeft = newOptions.el.style.left.replace(/px/, '') || 0;
+            startLeft = newOptions.el.scrollLeft;
             changeLeft = (options.to.left !== undefined) ? (options.to.left - Math.abs(startLeft)) : 0;
-            startTop = newOptions.el.style.top.replace(/px/, '') || 0;
+            startTop = newOptions.el.scrollTop;
             changeTop = (options.to.top !== undefined) ? (options.to.top - Math.abs(startTop)) : 0;
+
+            if (newOptions.to.left !== undefined) {
+                newOptions.to.scrollLeft = newOptions.to.left;
+                delete newOptions.to.left;
+            }
+
+            if (newOptions.to.top !== undefined) {
+                newOptions.to.scrollTop = newOptions.to.top;
+                delete newOptions.to.top;
+            }
 
             return movesScroll.apply( this, [ startLeft, startTop, changeLeft, changeTop, newOptions ] );
         };
